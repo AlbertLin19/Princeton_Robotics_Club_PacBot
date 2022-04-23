@@ -14,7 +14,7 @@ class Node():
         return self.position == other.position
 
 
-def astar(maze, start, prev_start, end):
+def astar(maze, start, end):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
 
     start = tuple(start)
@@ -80,10 +80,7 @@ def astar(maze, start, prev_start, end):
         # Generate children
         children = []
         for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0)]: # Adjacent squares
-            if (current_node.position == start):
-                back = np.subtract(start, prev_start) * -1
-                if new_position == back:
-                    continue
+
             # Get node position
             node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
 

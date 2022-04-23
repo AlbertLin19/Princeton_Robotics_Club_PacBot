@@ -12,9 +12,9 @@ ACTIONS = [(-1, 0), (0, -1), (0, 0), (0, 1), (1, 0)]
 NT = 3
 
 # helper method to astar to a ghost, which is technically a barrier in maze
-def astar_ghost(maze, start, prev_start, end):
+def astar_ghost(maze, start, end):
     maze[end] = False
-    path = astar(maze, start, prev_start, end)
+    path = astar(maze, start, end)
     maze[end] = True
     return path
 
@@ -101,7 +101,7 @@ def get_action(state):
     closest_path = None
     for position in positions:
         print("pathfinding to power pellet")
-        path = astar(obstacles, state["pac"], state["prev_pac"], position)
+        path = astar(obstacles, state["pac"], position)
         if not path or len(path) < 2:
             continue 
         if closest_d is None or closest_d > len(path) - 1:
