@@ -58,7 +58,7 @@ def astar(maze, start, end):
                 current = current.parent
             path = path[::-1]
             if len(path) < 3:
-                    return [(0, 1)]
+                    return [(0, 0)]
             new_path = []
             distance = 0
             for i in range(len(path) - 2):
