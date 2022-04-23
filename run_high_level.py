@@ -1,7 +1,7 @@
 import numpy as np
 from simulator.gym_wrappers import PacBotEnv
 from simulator.visualizer import Visualizer
-from high_level import get_action
+from high_level import get_action, get_hardcoded_action1, get_hardcoded_action2, get_hardcoded_action3
 import time
 
 #           UP,      LEFT,    STAY,   RIGHT,  DOWN
@@ -55,7 +55,18 @@ if __name__ == "__main__":
             "dt": obs[env.STATE_VALUES.index("frightened_timer")] / 2,
         }
         print("getting actions")
-        actions = get_action(state) # in the form of a list of tuples, [(action, x), ..., (action, x)]
+        if env.game_state.lives == 3:
+            actions = get_hardcoded_action2(state)
+        if env.game_state.lives == 1:
+            actions = get_hardcoded_action1(state)
+        if env.game_state.lives == 2:
+            START_DIR = (1, 0)
+            actions = get_hardcoded_action3(state)
+        
+        #actions = get_hardcoded_action3(state)
+        
+        #actions = get_hardcoded_action1(state) # in the form of a list of tuples, [(action, x), ..., (action, x)]
+        #actions = get_action(state)
         print("got actions")
         print(actions)
         action = actions[0]

@@ -176,3 +176,157 @@ def get_action(state):
         return closest_actions[:5]
 
     return [(0, 0)]
+
+F = 1124314
+L = 13898
+R = 13424
+H = 238872
+A = 54354
+X = 82348
+B = 2342348
+actions1 = [[I,I,I,I,I,I,I,I,I,I,I,I,e,e,e,e,e,e,e,e,e,I,I,I,I,I,I,I,I,I,I], # 0
+        [I,o,o,o,o,I,I,O,F,X,A,I,e,e,e,e,e,e,e,e,e,I,o,o,o,o,o,O,o,o,I],
+        [I,o,I,I,o,I,I,H,I,I,A,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,I,I,o,I],
+        [I,o,I,I,R,F,L,L,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,R,I,I,I,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,F,I,I,I,I,I,o,I,I,I,I,I,I,I,I,I,I,I,o,I,I,o,I,I,I,o,I], # 5
+        [I,o,I,I,R,R,F,L,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,I],
+        [I,o,I,I,I,I,I,L,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,I,I,o,I],
+        [I,o,I,I,I,I,I,B,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,o,o,B,I,I,o,e,e,e,e,e,e,e,e,e,I,I,o,o,o,o,I,e,I,o,I],
+        [I,o,I,I,o,I,I,B,I,I,o,I,I,e,I,I,I,I,I,e,I,I,o,I,I,o,I,e,I,o,I], # 10
+        [I,o,I,I,o,I,I,B,I,I,o,I,I,e,I,n,n,n,I,e,I,I,o,I,I,o,I,I,I,o,I],
+        [I,o,o,o,o,I,I,B,o,o,o,I,I,e,I,n,n,n,I,e,e,e,o,I,I,o,o,o,o,o,I],
+        [I,o,I,I,I,I,I,B,I,I,I,I,I,e,I,n,n,n,n,e,I,I,I,I,I,o,I,I,I,I,I],
+        [I,o,I,I,I,I,I,B,I,I,I,I,I,e,I,n,n,n,n,e,I,I,I,I,I,o,I,I,I,I,I],
+        [I,o,o,o,o,I,I,B,o,o,o,I,I,e,I,n,n,n,I,e,e,e,o,I,I,o,o,o,o,o,I], # 15
+        [I,o,I,I,o,I,I,o,I,I,o,I,I,e,I,n,n,n,I,e,I,I,o,I,I,o,I,I,I,o,I],
+        [I,o,I,I,o,I,I,o,I,I,o,I,I,e,I,I,I,I,I,e,I,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,o,o,o,I,I,o,e,e,e,e,e,e,e,e,e,I,I,o,o,o,o,I,e,I,o,I],
+        [I,o,I,I,I,I,I,o,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,e,I,o,I],
+        [I,o,I,I,I,I,I,o,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,I,I,o,I], # 20
+        [I,o,I,I,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,I],
+        [I,o,I,I,o,I,I,I,I,I,o,I,I,I,I,I,I,I,I,I,I,I,o,I,I,o,I,I,I,o,I],
+        [I,o,I,I,o,I,I,I,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,o,o,o,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,I,I,o,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,I,I,o,I], # 25
+        [I,o,o,o,o,I,I,O,o,o,o,I,e,e,e,e,e,e,e,e,e,I,o,o,o,o,o,O,o,o,I],
+        [I,I,I,I,I,I,I,I,I,I,I,I,e,e,e,e,e,e,e,e,e,I,I,I,I,I,I,I,I,I,I]]
+#        |         |         |         |         |         |         |   top right of pacman board
+#        0         5        10        15       20         25       30
+actions1 = np.array(actions1)
+def get_hardcoded_action1(state):
+    if actions1[tuple(state["pac"])] == B:
+        return [(0, 8), (1, -1)]
+    if actions1[tuple(state["pac"])] == F:
+        return [(0, 2)]
+    if actions1[tuple(state["pac"])] == L:
+        return [(0, 1), (1, -1)]
+    if actions1[tuple(state["pac"])] == R:
+        return [(0, 1), (-1, -1)]
+    if actions1[tuple(state["pac"])] == H:
+        if (actions1[tuple(state["r"])] == A) or (actions1[tuple(state["o"])] == A) or (actions1[tuple(state["b"])] == A) or (actions1[tuple(state["p"])] == A) or (actions1[tuple(state["r"])] == X) or (actions1[tuple(state["o"])] == X) or (actions1[tuple(state["b"])] == X) or (actions1[tuple(state["p"])] == X):
+            return [(0, 1), (-1, -1)]
+        return [(0, 0)]
+    if actions1[tuple(state["pac"])] == X:
+        return [(0, 1), (-1, -1)]
+    else:
+        return [(0, 100)]
+    
+actions2 = [[I,I,I,I,I,I,I,I,I,I,I,I,e,e,e,e,e,e,e,e,e,I,I,I,I,I,I,I,I,I,I], # 0
+        [I,o,o,o,o,I,I,O,F,X,A,I,e,e,e,e,e,e,e,e,e,I,o,o,o,o,o,O,o,o,I],
+        [I,o,I,I,o,I,I,H,I,I,A,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,I,I,o,I],
+        [I,o,I,I,o,F,L,L,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,I,I,I,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,I,I,I,I,I,o,I,I,I,I,I,I,I,I,I,I,I,o,I,I,o,I,I,I,o,I], # 5
+        [I,o,I,I,o,o,o,R,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,I],
+        [I,o,I,I,I,I,I,R,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,I,I,o,I],
+        [I,o,I,I,I,I,I,B,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,o,o,B,I,I,o,e,e,e,e,e,e,e,e,e,I,I,o,o,o,o,I,e,I,o,I],
+        [I,o,I,I,o,I,I,B,I,I,o,I,I,e,I,I,I,I,I,e,I,I,o,I,I,o,I,e,I,o,I], # 10
+        [I,o,I,I,o,I,I,B,I,I,o,I,I,e,I,n,n,n,I,e,I,I,o,I,I,o,I,I,I,o,I],
+        [I,o,o,o,o,I,I,B,o,o,o,I,I,e,I,n,n,n,I,e,e,e,o,I,I,o,o,o,o,o,I],
+        [I,o,I,I,I,I,I,B,I,I,I,I,I,e,I,n,n,n,n,e,I,I,I,I,I,o,I,I,I,I,I],
+        [I,o,I,I,I,I,I,B,I,I,I,I,I,e,I,n,n,n,n,e,I,I,I,I,I,o,I,I,I,I,I],
+        [I,o,o,o,o,I,I,B,o,o,o,I,I,e,I,n,n,n,I,e,e,e,o,I,I,o,o,o,o,o,I], # 15
+        [I,o,I,I,o,I,I,o,I,I,o,I,I,e,I,n,n,n,I,e,I,I,o,I,I,o,I,I,I,o,I],
+        [I,o,I,I,o,I,I,o,I,I,o,I,I,e,I,I,I,I,I,e,I,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,o,o,o,I,I,o,e,e,e,e,e,e,e,e,e,I,I,o,o,o,o,I,e,I,o,I],
+        [I,o,I,I,I,I,I,o,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,e,I,o,I],
+        [I,o,I,I,I,I,I,o,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,I,I,o,I], # 20
+        [I,o,I,I,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,I],
+        [I,o,I,I,o,I,I,I,I,I,o,I,I,I,I,I,I,I,I,I,I,I,o,I,I,o,I,I,I,o,I],
+        [I,o,I,I,o,I,I,I,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,o,o,o,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,I,I,o,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,I,I,o,I], # 25
+        [I,o,o,o,o,I,I,O,o,o,o,I,e,e,e,e,e,e,e,e,e,I,o,o,o,o,o,O,o,o,I],
+        [I,I,I,I,I,I,I,I,I,I,I,I,e,e,e,e,e,e,e,e,e,I,I,I,I,I,I,I,I,I,I]]
+#        |         |         |         |         |         |         |   top right of pacman board
+#        0         5        10        15       20         25       30
+actions2 = np.array(actions2)
+def get_hardcoded_action2(state):
+    if actions2[tuple(state["pac"])] == B:
+        return [(0, 8), (1, -1)]
+    if actions2[tuple(state["pac"])] == F:
+        return [(0, 2)]
+    if actions2[tuple(state["pac"])] == L:
+        return [(0, 1), (1, -1)]
+    if actions2[tuple(state["pac"])] == R:
+        return [(0, 1), (-1, -1)]
+    if actions2[tuple(state["pac"])] == H:
+        if (actions2[tuple(state["r"])] == A) or (actions2[tuple(state["o"])] == A) or (actions2[tuple(state["b"])] == A) or (actions2[tuple(state["p"])] == A) or (actions2[tuple(state["r"])] == X) or (actions2[tuple(state["o"])] == X) or (actions2[tuple(state["b"])] == X) or (actions2[tuple(state["p"])] == X):
+            return [(0, 1), (-1, -1)]
+        return [(0, 0)]
+    if actions2[tuple(state["pac"])] == X:
+        return [(0, 1), (-1, -1)]
+    else:
+        return [(0, 100)]
+
+actions3 = [[I,I,I,I,I,I,I,I,I,I,I,I,e,e,e,e,e,e,e,e,e,I,I,I,I,I,I,I,I,I,I], # 0
+        [I,o,o,o,o,I,I,O,F,X,A,I,e,e,e,e,e,e,e,e,e,I,o,o,o,o,o,O,o,o,I],
+        [I,o,I,I,o,I,I,H,I,I,A,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,I,I,o,I],
+        [I,o,I,I,o,F,L,L,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,I,I,I,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,I,I,I,I,I,o,I,I,I,I,I,I,I,I,I,I,I,o,I,I,o,I,I,I,o,I], # 5
+        [I,o,I,I,o,o,o,R,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,I],
+        [I,o,I,I,I,I,I,R,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,I,I,o,I],
+        [I,o,I,I,I,I,I,B,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,o,o,B,I,I,o,e,e,e,e,e,e,e,e,e,I,I,o,o,o,o,I,e,I,o,I],
+        [I,o,I,I,o,I,I,B,I,I,o,I,I,e,I,I,I,I,I,e,I,I,o,I,I,o,I,e,I,o,I], # 10
+        [I,o,I,I,o,I,I,B,I,I,o,I,I,e,I,n,n,n,I,e,I,I,o,I,I,o,I,I,I,o,I],
+        [I,o,o,o,o,I,I,B,o,o,o,I,I,e,I,n,n,n,I,e,e,e,o,I,I,o,o,o,o,o,I],
+        [I,o,I,I,I,I,I,B,I,I,I,I,I,e,I,n,n,n,n,e,I,I,I,I,I,o,I,I,I,I,I],
+        [I,o,I,I,I,I,I,B,I,I,I,I,I,e,I,n,n,n,n,e,I,I,I,I,I,o,I,I,I,I,I],
+        [I,o,o,o,o,I,I,B,o,o,o,I,I,e,I,n,n,n,I,e,e,e,o,I,I,o,o,o,o,o,I], # 15
+        [I,o,I,I,o,I,I,B,I,I,o,I,I,e,I,n,n,n,I,e,I,I,o,I,I,o,I,I,I,o,I],
+        [I,o,I,I,o,I,I,B,I,I,o,I,I,e,I,I,I,I,I,e,I,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,o,o,B,I,I,o,e,e,e,e,e,e,e,e,e,I,I,o,o,o,o,I,e,I,o,I],
+        [I,o,I,I,I,I,I,B,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,e,I,o,I],
+        [I,o,I,I,I,I,I,L,I,I,o,I,I,I,I,I,e,I,I,I,I,I,I,I,I,o,I,I,I,o,I], # 20
+        [I,o,I,I,o,o,o,L,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,o,I],
+        [I,o,I,I,o,I,I,I,I,I,o,I,I,I,I,I,I,I,I,I,I,I,o,I,I,o,I,I,I,o,I],
+        [I,o,I,I,o,I,I,I,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,o,o,o,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,e,I,o,I],
+        [I,o,I,I,o,I,I,o,I,I,o,I,e,e,e,e,e,e,e,e,e,I,o,I,I,o,I,I,I,o,I], # 25
+        [I,o,o,o,o,I,I,O,o,o,o,I,e,e,e,e,e,e,e,e,e,I,o,o,o,o,o,O,o,o,I],
+        [I,I,I,I,I,I,I,I,I,I,I,I,e,e,e,e,e,e,e,e,e,I,I,I,I,I,I,I,I,I,I]]
+#        |         |         |         |         |         |         |   top right of pacman board
+#        0         5        10        15       20         25       30
+actions3 = np.array(actions3)
+def get_hardcoded_action3(state):
+    if actions3[tuple(state["pac"])] == B:
+        return [(0, 7), (1, -1)]
+    if actions3[tuple(state["pac"])] == F:
+        return [(0, 2)]
+    if actions3[tuple(state["pac"])] == L:
+        return [(0, 1), (1, -1)]
+    if actions3[tuple(state["pac"])] == R:
+        return [(0, 1), (-1, -1)]
+    if actions3[tuple(state["pac"])] == H:
+        if (actions3[tuple(state["r"])] == A) or (actions3[tuple(state["o"])] == A) or (actions3[tuple(state["b"])] == A) or (actions3[tuple(state["p"])] == A) or (actions3[tuple(state["r"])] == X) or (actions3[tuple(state["o"])] == X) or (actions3[tuple(state["b"])] == X) or (actions3[tuple(state["p"])] == X):
+            return [(0, 1), (-1, -1)]
+        return [(0, 0)]
+    if actions3[tuple(state["pac"])] == X:
+        return [(0, 1), (-1, -1)]
+    else:
+        return [(0, 100)]
