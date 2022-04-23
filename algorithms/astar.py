@@ -68,9 +68,15 @@ def astar(maze, start, end):
                     new_path.append((0, distance + 1))
                     distance = 0
                     if change[0]:
-                        new_path.append((diff[1], -1))
+                        if change[0] < 0:
+                            new_path.append((diff[1], -1))
+                        else:
+                            new_path.append((diff[1] * -1, -1))
                     else:
-                        new_path.append((diff[0], -1))
+                        if change[1] > 0: 
+                            new_path.append((diff[0], -1))
+                        else:
+                            new_path.append((diff[0] * -1, -1))
                 else:
                     distance += 1
             if distance != 0:
