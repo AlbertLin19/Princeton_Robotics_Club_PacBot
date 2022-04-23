@@ -12,13 +12,14 @@ ACTIONS = [(-1, 0), (0, -1), (0, 0), (0, 1), (1, 0)]
 NT = 3
 
 # helper method to astar to a ghost, which is technically a barrier in maze
-def astar_ghost(maze, start, end):
+def astar_ghost(maze, start, prev_start, end):
     maze[end] = False
-    path = astar(maze, start, end)
+    path = astar(maze, start, prev_start, end)
     maze[end] = True
     return path
 
 # state is a dict with keys:
+#    prev_pac:      (row, col)
 #    pellets:       height x width
 #    power_pellets: height x width
 #    pac:           (row, col)
@@ -32,7 +33,7 @@ def astar_ghost(maze, start, end):
 #    pf:            bool
 #    dt:            distance threshold (in cells)
 def get_action(state):
-
+    # first coordinate 0, 1, -1 depending on forward, left, right
     obstacles = WALLS.copy()
     g_positions = []
     f_positions = []
@@ -57,7 +58,10 @@ def get_action(state):
     else:
         g_positions.append(state["p"])
         obstacles[state["p"]] = True
-
+    # pass the first five things 
+    # prevents pacbot from going backwards
+    obstacles[state["prev_pac"]] = True
+    
     print("phase: frightened ghosts")
 
     # target the closest frightened ghost not on pac
@@ -75,7 +79,7 @@ def get_action(state):
             if closest_d <= 1:
                 break
     if closest_d and closest_d <= state["dt"]:
-        return ACTIONS.index(tuple(np.subtract(closest_path[1], closest_path[0])))
+        return path
 
     print("phase: power pellets")
 
@@ -90,13 +94,14 @@ def get_action(state):
         path = astar_ghost(obstacles, state["pac"], g_position)
         if not path or len(path) - 1 <= NT:
             nearby = True
+            
     print("nearby:", nearby)
     positions = np.argwhere(state["power_pellets"])
     closest_d = None 
     closest_path = None
     for position in positions:
         print("pathfinding to power pellet")
-        path = astar(obstacles, state["pac"], position)
+        path = astar(obstacles, state["pac"], state["prev_pac"], position)
         if not path or len(path) < 2:
             continue 
         if closest_d is None or closest_d > len(path) - 1:
@@ -106,18 +111,20 @@ def get_action(state):
                 break
     if closest_d:
         if closest_d > 1 or nearby:
-            return ACTIONS.index(tuple(np.subtract(closest_path[1], closest_path[0])))
+            return closest_path
         else:
-            return ACTIONS.index((0, 0))
-        
+            return [(0, 0)]
+    # grid, algorithm, a star
     print("phase: pellets")
     # target the closest pellet not on pac
     # move to it if it exists
     positions = np.argwhere(state["pellets"])
+    
+
     closest_d = None 
     closest_path = None
     for position in positions:
-        path = astar(obstacles, state["pac"], position)
+        path = astar(obstacles, state["pac"], state["prev"], position)
         if not path or len(path) < 2:
             continue 
         if closest_d is None or closest_d > len(path) - 1:
@@ -126,6 +133,6 @@ def get_action(state):
             if closest_d <= 1:
                 break
     if closest_d:
-        return ACTIONS.index(tuple(np.subtract(closest_path[1], closest_path[0])))
+        return closest_path
 
-    return ACTIONS.index((0, 0))
+    return [(0, 0)]

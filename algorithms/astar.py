@@ -1,3 +1,4 @@
+import numpy as np
 class Node():
     """A node class for A* Pathfinding"""
 
@@ -13,7 +14,7 @@ class Node():
         return self.position == other.position
 
 
-def astar(maze, start, end):
+def astar(maze, start, prev_start, end):
     """Returns a list of tuples as a path from the given start to the given end in the given maze"""
 
     start = tuple(start)
@@ -31,6 +32,7 @@ def astar(maze, start, end):
 
     # Add the start node
     open_list.append(start_node)
+    
 
     # Loop until you find the end
     while len(open_list) > 0:
@@ -54,12 +56,34 @@ def astar(maze, start, end):
             while current is not None:
                 path.append(current.position)
                 current = current.parent
-            return path[::-1] # Return reversed path
+            path = path[::-1]
+            if len(path) < 3:
+                    return [(0, 1)]
+            new_path = []
+            distance = 0
+            for i in range(len(path) - 2):
+                change = np.subtract(path[i + 1], path[i])
+                diff = np.subtract(change, np.subtract(path[i + 2], path[i + 1]))
+                if diff[0] and diff[1]:
+                    new_path.append((0, distance + 1))
+                    distance = 0
+                    if change[0]:
+                        new_path.append((diff[1], -1))
+                    else:
+                        new_path.append((diff[0], -1))
+                else:
+                    distance += 1
+            if distance != 0:
+                new_path.append((0, distance))
+            return new_path # Return reversed path
 
         # Generate children
         children = []
         for new_position in [(0, -1), (0, 1), (-1, 0), (1, 0)]: # Adjacent squares
-
+            if (current_node.position == start):
+                back = np.subtract(start, prev_start) * -1
+                if new_position == back:
+                    continue
             # Get node position
             node_position = (current_node.position[0] + new_position[0], current_node.position[1] + new_position[1])
 
