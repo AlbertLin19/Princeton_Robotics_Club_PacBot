@@ -79,7 +79,7 @@ def get_action(state):
             if closest_d <= 1:
                 break
     if closest_d and closest_d <= state["dt"]:
-        return path
+        return closest_path[:5]
 
     print("phase: power pellets")
 
@@ -111,7 +111,7 @@ def get_action(state):
                 break
     if closest_d:
         if closest_d > 1 or nearby:
-            return closest_path
+            return closest_path[:5]
         else:
             return [(0, 0)]
     # grid, algorithm, a star
@@ -133,6 +133,6 @@ def get_action(state):
             if closest_d <= 1:
                 break
     if closest_d:
-        return closest_path
+        return closest_path[:5]
 
     return [(0, 0)]
