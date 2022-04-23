@@ -241,13 +241,13 @@ class PacBotEnv(gym.Env):
         #         print(cell, end='')
         #     print()
 
-        print(f'Mode: {state[STATE_VALUES.index("mode")]}, Lives: {state[STATE_VALUES.index("lives")]}, Cherry: {state[STATE_VALUES.index("cherry")]}, Frightened Timer: {state[STATE_VALUES.index("frightened_timer")]}')
-        print(f'a - dir: {state[STATE_VALUES.index("pac_dir")]}')
-        print(f'r - dir: {state[STATE_VALUES.index("r_dir")]}, frightened: {state[STATE_VALUES.index("r_frightened")]}, frightened_counter: {state[STATE_VALUES.index("r_frightened_counter")]}')
-        print(f'p - dir: {state[STATE_VALUES.index("p_dir")]}, frightened: {state[STATE_VALUES.index("p_frightened")]}, frightened_counter: {state[STATE_VALUES.index("p_frightened_counter")]}')
-        print(f'o - dir: {state[STATE_VALUES.index("o_dir")]}, frightened: {state[STATE_VALUES.index("o_frightened")]}, frightened_counter: {state[STATE_VALUES.index("o_frightened_counter")]}')
-        print(f'b - dir: {state[STATE_VALUES.index("b_dir")]}, frightened: {state[STATE_VALUES.index("b_frightened")]}, frightened_counter: {state[STATE_VALUES.index("b_frightened_counter")]}')
-        print(f'reward: {self.prev_reward}, done: {self.prev_done}')
+        # print(f'Mode: {state[STATE_VALUES.index("mode")]}, Lives: {state[STATE_VALUES.index("lives")]}, Cherry: {state[STATE_VALUES.index("cherry")]}, Frightened Timer: {state[STATE_VALUES.index("frightened_timer")]}')
+        # print(f'a - dir: {state[STATE_VALUES.index("pac_dir")]}')
+        # print(f'r - dir: {state[STATE_VALUES.index("r_dir")]}, frightened: {state[STATE_VALUES.index("r_frightened")]}, frightened_counter: {state[STATE_VALUES.index("r_frightened_counter")]}')
+        # print(f'p - dir: {state[STATE_VALUES.index("p_dir")]}, frightened: {state[STATE_VALUES.index("p_frightened")]}, frightened_counter: {state[STATE_VALUES.index("p_frightened_counter")]}')
+        # print(f'o - dir: {state[STATE_VALUES.index("o_dir")]}, frightened: {state[STATE_VALUES.index("o_frightened")]}, frightened_counter: {state[STATE_VALUES.index("o_frightened_counter")]}')
+        # print(f'b - dir: {state[STATE_VALUES.index("b_dir")]}, frightened: {state[STATE_VALUES.index("b_frightened")]}, frightened_counter: {state[STATE_VALUES.index("b_frightened_counter")]}')
+        # print(f'reward: {self.prev_reward}, done: {self.prev_done}')
         return grid
     
     def close(self):

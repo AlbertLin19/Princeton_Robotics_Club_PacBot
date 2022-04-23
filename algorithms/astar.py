@@ -57,9 +57,12 @@ def astar(maze, start, end):
                 path.append(current.position)
                 current = current.parent
             path = path[::-1]
-            if len(path) < 3:
-                    return [(0, 0)]
-            new_path = []
+            print(path)
+            if len(path) == 1: # no actions needed
+                return [], len(path)
+            if len(path) == 2: # no turns needed
+                return [(0, 1)], len(path)
+            new_path = [] # otherwise, convert 
             distance = 0
             for i in range(len(path) - 2):
                 change = np.subtract(path[i + 1], path[i])
@@ -81,7 +84,7 @@ def astar(maze, start, end):
                     distance += 1
             if distance != 0:
                 new_path.append((0, distance))
-            return new_path # Return reversed path
+            return new_path, len(path) # Return reversed path
 
         # Generate children
         children = []
