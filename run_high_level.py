@@ -4,10 +4,17 @@ from simulator.visualizer import Visualizer
 from high_level import get_action
 import time
 
+#           UP,      LEFT,    STAY,   RIGHT,  DOWN
+ACTIONS = [(-1, 0), (0, -1), (0, 0), (0, 1), (1, 0)]
+#           LEFT,    DOWN,    _,      UP,     RIGHT
+LEFT =    [(0, -1), (1, 0), (0, 0), (-1, 0), (0, 1)]
+
+
 if __name__ == "__main__":
     visualizer = Visualizer()
     env = PacBotEnv(speed=0.8)
     obs = env.reset()
+    direction = (-1, 0)
     grid = env.render()
     visualizer.draw_grid(grid)
 
@@ -26,10 +33,12 @@ if __name__ == "__main__":
         for i in range(len(power_pellet_exists)):
             if power_pellet_exists[i]:
                 power_pellets[env.POWER_PELLET_LOCATIONS == i+1] = 1
+        
         state = {
             "pellets": pellets,
             "power_pellets": power_pellets,
             "pac": (int(obs[env.STATE_VALUES.index("pac_x")]), int(obs[env.STATE_VALUES.index("pac_y")])),
+            "dir": direction,
             "r": (int(obs[env.STATE_VALUES.index("r_x")]), int(obs[env.STATE_VALUES.index("r_y")])),
             "b": (int(obs[env.STATE_VALUES.index("b_x")]), int(obs[env.STATE_VALUES.index("b_y")])),
             "o": (int(obs[env.STATE_VALUES.index("o_x")]), int(obs[env.STATE_VALUES.index("o_y")])),
@@ -40,10 +49,25 @@ if __name__ == "__main__":
             "pf": obs[env.STATE_VALUES.index("p_frightened")],
             "dt": obs[env.STATE_VALUES.index("frightened_timer")] / 2,
         }
-        action = get_action(state)
-        obs, reward, done, _ = env.step(action)
-        grid = env.render()
-        visualizer.draw_grid(grid)
+        actions = get_action(state) # in the form of a list of tuples, [(action, x), ..., (action, x)]
+        action = actions[0]
+        if action[0] == 0: # move forward
+            for _ in range(action[0]):
+                obs, reward, done, _ = env.step(ACTIONS.index(tuple(direction)))
+                grid = env.render()
+                visualizer.draw_grid(grid)
+        elif action[0] == 1: # turn left
+            direction = LEFT[ACTIONS.index(tuple(direction))]
+            obs, reward, done, _ = env.step(ACTIONS.index(tuple(direction)))
+            grid = env.render()
+            visualizer.draw_grid(grid)
+        elif action[0] == -1: # turn right
+            direction = ACTIONS[LEFT.index(tuple(direction))]
+            obs, reward, done, _ = env.step(ACTIONS.index(tuple(direction)))
+            grid = env.render()
+            visualizer.draw_grid(grid)
+
+            
         # for row in obs[11]:
         #     for cell in row:
         #         print('1' if cell else '0', end='')
